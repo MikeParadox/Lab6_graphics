@@ -526,30 +526,13 @@
           }
         }
       },
-      "Tmds.DBus/0.95.2": {
+      "Tmds.DBus.Protocol/0.21.3": {
         "type": "package",
         "compile": {
-          "lib/net6.0/Tmds.DBus.dll": {
-            "related": ".xml"
-          }
+          "lib/net8.0/Tmds.DBus.Protocol.dll": {}
         },
         "runtime": {
-          "lib/net6.0/Tmds.DBus.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Tmds.DBus.Protocol/0.95.2": {
-        "type": "package",
-        "compile": {
-          "lib/net9.0/Tmds.DBus.Protocol.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net9.0/Tmds.DBus.Protocol.dll": {
-            "related": ".xml"
-          }
+          "lib/net8.0/Tmds.DBus.Protocol.dll": {}
         }
       }
     }
@@ -1335,43 +1318,18 @@
         "skiasharp.nativeassets.win32.nuspec"
       ]
     },
-    "Tmds.DBus/0.95.2": {
-      "sha512": "8+tkXujr5r2cDWucHh4kq3fOaHDtrwE5GjpNHXs9Z1B8+mLxwMmIG2SpvgnTAu3o6xmEtt8J4pjT9w5pJ8Zc8A==",
+    "Tmds.DBus.Protocol/0.21.3": {
+      "sha512": "hDwB8WsQoyALQKqIbwzS68UKdlnafDm4T/DkO/JrA/YIneP/rKv96SxYPVXeh3FP4i/SXfShrYftKLtciJAIlw==",
       "type": "package",
-      "path": "tmds.dbus/0.95.2",
+      "path": "tmds.dbus.protocol/0.21.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "README.md",
-        "icon_128.png",
-        "lib/net6.0/Tmds.DBus.dll",
-        "lib/net6.0/Tmds.DBus.xml",
-        "lib/netstandard2.0/Tmds.DBus.dll",
-        "lib/netstandard2.0/Tmds.DBus.xml",
-        "tmds.dbus.0.95.2.nupkg.sha512",
-        "tmds.dbus.nuspec"
-      ]
-    },
-    "Tmds.DBus.Protocol/0.95.2": {
-      "sha512": "4zlJSYYZGCKnF5xE1L5VEm5YsfjLTz5jlWBgvBxHA7yk8Lnys/6WWpeD+CWmNm4QmawR+x0xIbGGZNcMxcy8nQ==",
-      "type": "package",
-      "path": "tmds.dbus.protocol/0.95.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "icon_128.png",
         "lib/net6.0/Tmds.DBus.Protocol.dll",
-        "lib/net6.0/Tmds.DBus.Protocol.xml",
         "lib/net8.0/Tmds.DBus.Protocol.dll",
-        "lib/net8.0/Tmds.DBus.Protocol.xml",
-        "lib/net9.0/Tmds.DBus.Protocol.dll",
-        "lib/net9.0/Tmds.DBus.Protocol.xml",
         "lib/netstandard2.0/Tmds.DBus.Protocol.dll",
-        "lib/netstandard2.0/Tmds.DBus.Protocol.xml",
         "lib/netstandard2.1/Tmds.DBus.Protocol.dll",
-        "lib/netstandard2.1/Tmds.DBus.Protocol.xml",
-        "tmds.dbus.protocol.0.95.2.nupkg.sha512",
+        "tmds.dbus.protocol.0.21.3.nupkg.sha512",
         "tmds.dbus.protocol.nuspec"
       ]
     }
@@ -1382,12 +1340,11 @@
       "Avalonia.Desktop >= 11.2.1",
       "Avalonia.Diagnostics >= 11.2.1",
       "Avalonia.Themes.Fluent >= 11.2.1",
-      "Tmds.DBus >= 0.95.2",
-      "Tmds.DBus.Protocol >= 0.95.2"
+      "Tmds.DBus.Protocol >= 0.21.3"
     ]
   },
   "packageFolders": {
-    "/root/.nuget/packages/": {}
+    "/home/mikhail/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -1395,11 +1352,11 @@
       "projectUniqueName": "/mnt/local_disk/Lab6/Lab6.csproj",
       "projectName": "Lab6",
       "projectPath": "/mnt/local_disk/Lab6/Lab6.csproj",
-      "packagesPath": "/root/.nuget/packages/",
+      "packagesPath": "/home/mikhail/.nuget/packages/",
       "outputPath": "/mnt/local_disk/Lab6/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/root/.nuget/NuGet/NuGet.Config"
+        "/home/mikhail/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -1410,6 +1367,7 @@
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {}
         }
@@ -1428,6 +1386,7 @@
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Avalonia": {
@@ -1446,13 +1405,10 @@
             "target": "Package",
             "version": "[11.2.1, )"
           },
-          "Tmds.DBus": {
-            "target": "Package",
-            "version": "[0.95.2, )"
-          },
           "Tmds.DBus.Protocol": {
+            "suppressParent": "All",
             "target": "Package",
-            "version": "[0.95.2, )"
+            "version": "[0.21.3, )"
           }
         },
         "imports": [

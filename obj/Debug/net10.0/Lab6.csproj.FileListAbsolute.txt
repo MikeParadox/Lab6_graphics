@@ -57,6 +57,7 @@
 /mnt/local_disk/Lab6/obj/Debug/net10.0/Lab6.AssemblyInfoInputs.cache
 /mnt/local_disk/Lab6/obj/Debug/net10.0/Lab6.AssemblyInfo.cs
 /mnt/local_disk/Lab6/obj/Debug/net10.0/Lab6.csproj.CoreCompileInputs.cache
+/mnt/local_disk/Lab6/obj/Debug/net10.0/Lab6.sourcelink.json
 /mnt/local_disk/Lab6/obj/Debug/net10.0/Avalonia/Lab6.dll
 /mnt/local_disk/Lab6/obj/Debug/net10.0/Avalonia/Lab6.pdb
 /mnt/local_disk/Lab6/obj/Debug/net10.0/refint/Avalonia/Lab6.dll

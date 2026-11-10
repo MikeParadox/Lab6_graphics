@@ -13,8 +13,8 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
     <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1" />
-    <PackageReference Include="Tmds.DBus" Version="0.95.2" />
-    <PackageReference Include="Tmds.DBus.Protocol" Version="0.95.2" />
+
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

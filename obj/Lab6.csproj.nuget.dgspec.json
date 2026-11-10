@@ -10,11 +10,11 @@
         "projectUniqueName": "/mnt/local_disk/Lab6/Lab6.csproj",
         "projectName": "Lab6",
         "projectPath": "/mnt/local_disk/Lab6/Lab6.csproj",
-        "packagesPath": "/root/.nuget/packages/",
+        "packagesPath": "/home/mikhail/.nuget/packages/",
         "outputPath": "/mnt/local_disk/Lab6/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/root/.nuget/NuGet/NuGet.Config"
+          "/home/mikhail/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -61,13 +61,10 @@
               "target": "Package",
               "version": "[11.2.1, )"
             },
-            "Tmds.DBus": {
-              "target": "Package",
-              "version": "[0.95.2, )"
-            },
             "Tmds.DBus.Protocol": {
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[0.95.2, )"
+              "version": "[0.21.3, )"
             }
           },
           "imports": [
