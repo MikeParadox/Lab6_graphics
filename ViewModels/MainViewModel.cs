@@ -38,6 +38,9 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private int _surfaceSegments = 20;
     private string _surfaceFunction = "sin(x) * cos(y)";
+    
+    public string[] AxisOptions  { get; } = { "X", "Y", "Z" };
+    public string[] PlaneOptions { get; } = { "XY", "XZ", "YZ" };
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -74,7 +77,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public string RotationAxis
     {
         get => _rotationAxis;
-        set => SetProperty(ref _rotationAxis, value ?? "X");
+        set => SetProperty(ref _rotationAxis,
+            AxisOptions.Contains(value) ? value! : "X");
     }
 
     public double ScaleFactor { get => _scaleFactor; set => SetProperty(ref _scaleFactor, value); }
@@ -82,7 +86,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public string ReflectionPlane
     {
         get => _reflectionPlane;
-        set => SetProperty(ref _reflectionPlane, value ?? "XY");
+        set => SetProperty(ref _reflectionPlane,
+            PlaneOptions.Contains(value) ? value! : "XY");
     }
 
     public double AxisPointX { get => _axisPointX; set => SetProperty(ref _axisPointX, value); }
@@ -98,7 +103,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public string RevolutionAxis
     {
         get => _revolutionAxis;
-        set => SetProperty(ref _revolutionAxis, value ?? "Y");
+        set => SetProperty(ref _revolutionAxis,
+            AxisOptions.Contains(value) ? value! : "Y");
     }
 
     public int SurfaceSegments { get => _surfaceSegments; set => SetProperty(ref _surfaceSegments, value); }
@@ -166,6 +172,12 @@ public sealed class MainViewModel : INotifyPropertyChanged
         LoadModelCommand = new AsyncRelayCommand(() => LoadModelAsync(_ownerWindow));
         SaveModelCommand = new AsyncRelayCommand(() => SaveModelAsync(_ownerWindow));
     }
+    
+    private void ApplyToModel(Matrix4 matrix)
+    {
+        Model.Apply(matrix);
+        OnPropertyChanged(nameof(Model));
+    }
 
     public void AttachWindow(Window owner) => _ownerWindow = owner;
 
@@ -177,24 +189,56 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public void ApplyTranslation()
     {
-        Model.Apply(Matrix4.Translation(TranslateX, TranslateY, TranslateZ));
+        ApplyToModel(Matrix4.Translation(TranslateX, TranslateY, TranslateZ));
         Status = $"Смещение: ({TranslateX}; {TranslateY}; {TranslateZ})";
     }
 
     public void ApplyRotationAroundCoordinateAxis()
     {
+        var v0 = Model.Vertices[0];
+        var c0 = Model.Center();
+        double r0 = Point3.Distance(Point3.Zero, v0);
+        double rc0 = Point3.Distance(c0, Point3.Zero);
+
         double radians = RotationAngle * Math.PI / 180;
 
-        Matrix4 matrix = RotationAxis.ToUpperInvariant() switch
+        Matrix4 rotation = RotationAxis.ToUpperInvariant() switch
         {
             "X" => Matrix4.RotationX(radians),
             "Y" => Matrix4.RotationY(radians),
             "Z" => Matrix4.RotationZ(radians),
-            _ => Matrix4.Identity
+            _   => Matrix4.Identity
         };
 
-        Model.Apply(matrix);
-        Status = $"Поворот вокруг {RotationAxis} на {RotationAngle}°";
+        var matrix =
+            Matrix4.Translation(-c0.X, -c0.Y, -c0.Z) *
+            rotation *
+            Matrix4.Translation( c0.X,  c0.Y,  c0.Z);
+
+        ApplyToModel(matrix);
+
+        var v1 = Model.Vertices[0];
+        var c1 = Model.Center();
+        double r1 = Point3.Distance(Point3.Zero, v1);
+        double rc1 = Point3.Distance(c1, Point3.Zero);
+
+        double det =
+            matrix.M11 * (matrix.M22 * matrix.M33 - matrix.M23 * matrix.M32) -
+            matrix.M12 * (matrix.M21 * matrix.M33 - matrix.M23 * matrix.M31) +
+            matrix.M13 * (matrix.M21 * matrix.M32 - matrix.M22 * matrix.M31);
+
+        double dV0   = Point3.Distance(v0, v1);
+        double dC    = Point3.Distance(c0, c1);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[Rotate] axis='{RotationAxis}' angle={RotationAngle}° " +
+            $"det={det:F4} " +
+            $"r0={r0:F3}->r1={r1:F3} " +
+            $"dV0={dV0:F3} " +
+            $"c0={c0} c1={c1} dC={dC:F4} " +
+            $"rc0={rc0:F3}->rc1={rc1:F3}");
+
+        Status = $"Поворот вокруг {RotationAxis} на {RotationAngle}° (вокруг центра)";
     }
 
     public void ApplyScaleAroundCenter()
@@ -203,33 +247,42 @@ public sealed class MainViewModel : INotifyPropertyChanged
         double factor = ScaleFactor;
 
         var matrix =
-            Matrix4.Translation(-center.X, -center.Y, -center.Z) *
+            Matrix4.Translation(center.X, center.Y, center.Z) *
             Matrix4.Scale(factor, factor, factor) *
-            Matrix4.Translation(center.X, center.Y, center.Z);
+            Matrix4.Translation(-center.X, -center.Y, -center.Z);
 
-        Model.Apply(matrix);
+        ApplyToModel(matrix);
         Status = $"Масштабирование относительно центра: {factor}";
     }
 
     public void ApplyReflection()
     {
-        Model.Apply(Matrix4.Reflection(ReflectionPlane));
+        ApplyToModel(Matrix4.Reflection(ReflectionPlane));
         Status = $"Отражение относительно плоскости {ReflectionPlane}";
     }
 
     public void ApplyRotationAroundCustomAxis()
     {
+        var point = new Point3(AxisPointX, AxisPointY, AxisPointZ);
+        var direction = new Point3(AxisDirectionX, AxisDirectionY, AxisDirectionZ);
+
+        double len = Math.Sqrt(
+            direction.X * direction.X +
+            direction.Y * direction.Y +
+            direction.Z * direction.Z);
+
+        if (len < 1e-9)
+        {
+            Status = "Ошибка: направление оси не может быть нулевым";
+            return;
+        }
+
         try
         {
-            var point = new Point3(AxisPointX, AxisPointY, AxisPointZ);
-            var direction = new Point3(AxisDirectionX, AxisDirectionY, AxisDirectionZ);
-
             var matrix = Matrix4.RotationAroundLine(
-                point,
-                direction,
+                point, direction,
                 RotationAngle * Math.PI / 180);
-
-            Model.Apply(matrix);
+            ApplyToModel(matrix);
             Status = $"Поворот вокруг произвольной прямой на {RotationAngle}°";
         }
         catch (Exception exception)

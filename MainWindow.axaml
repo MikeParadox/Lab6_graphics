@@ -31,11 +31,17 @@
         <!-- Rotation about coordinate axis (through model center) -->
         <TextBlock Text="Поворот вокруг оси" FontWeight="Bold" Margin="0,8,0,0"/>
         <TextBox Text="{Binding RotationAngle}" Watermark="Угол (град.)"/>
-        <ComboBox SelectedItem="{Binding RotationAxis}" HorizontalAlignment="Stretch">
-          <ComboBoxItem Content="X"/>
-          <ComboBoxItem Content="Y"/>
-          <ComboBoxItem Content="Z"/>
-        </ComboBox>
+        <ComboBox ItemsSource="{Binding AxisOptions}"
+                  SelectedItem="{Binding RotationAxis}"
+                  HorizontalAlignment="Stretch"/>
+
+        <ComboBox ItemsSource="{Binding PlaneOptions}"
+                  SelectedItem="{Binding ReflectionPlane}"
+                  HorizontalAlignment="Stretch"/>
+
+        <ComboBox ItemsSource="{Binding AxisOptions}"
+                  SelectedItem="{Binding RevolutionAxis}"
+                  HorizontalAlignment="Stretch"/>
         <Button Content="Повернуть" Command="{Binding ApplyRotationCommand}"/>
 
         <!-- Scale -->
@@ -45,11 +51,7 @@
 
         <!-- Reflection -->
         <TextBlock Text="Отражение" FontWeight="Bold" Margin="0,8,0,0"/>
-        <ComboBox SelectedItem="{Binding ReflectionPlane}" HorizontalAlignment="Stretch">
-          <ComboBoxItem Content="XY"/>
-          <ComboBoxItem Content="XZ"/>
-          <ComboBoxItem Content="YZ"/>
-        </ComboBox>
+        
         <Button Content="Отразить" Command="{Binding ApplyReflectionCommand}"/>
 
         <!-- Rotation about arbitrary line -->
@@ -84,11 +86,7 @@
         <!-- Revolution -->
         <TextBlock Text="Фигура вращения" FontWeight="Bold" Margin="0,8,0,0"/>
         <TextBox Text="{Binding RevolutionSegments}" Watermark="Количество разбиений"/>
-        <ComboBox SelectedItem="{Binding RevolutionAxis}" HorizontalAlignment="Stretch">
-          <ComboBoxItem Content="X"/>
-          <ComboBoxItem Content="Y"/>
-          <ComboBoxItem Content="Z"/>
-        </ComboBox>
+        
         <Button Content="Построить фигуру вращения" Command="{Binding BuildRevolutionCommand}"/>
 
         <!-- Surface -->

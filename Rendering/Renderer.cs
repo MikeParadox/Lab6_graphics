@@ -46,6 +46,10 @@ public static class Renderer
                 !double.IsFinite(p.Y) ||
                 !double.IsFinite(p.Z)))
         {
+            System.Diagnostics.Debug.WriteLine(
+                $"[Renderer] Модель содержит NaN/Inf, кадр пропущен. " +
+                $"Вершин: {model.Vertices.Count}. " +
+                $"Первая плохая: {model.Vertices.First(p => !double.IsFinite(p.X) || !double.IsFinite(p.Y) || !double.IsFinite(p.Z))}");
             return;
         }
 
