@@ -1,0 +1,136 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Lab6.ViewModels"
+        xmlns:rendering="using:Lab6.Rendering"
+        x:Class="Lab6.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="Лабораторная работа №6 — 3D-модели"
+        Width="1280"
+        Height="800">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="340,*" Margin="10">
+
+        <ScrollViewer Grid.Column="0" Margin="0,0,10,0">
+            <StackPanel Spacing="8">
+
+                <TextBlock Text="Модель" FontWeight="Bold" FontSize="17" />
+
+                <WrapPanel>
+                    <Button Content="Тетраэдр" Command="{Binding CreateTetrahedronCommand}" Margin="0,0,4,4" />
+                    <Button Content="Гексаэдр" Command="{Binding CreateHexahedronCommand}" Margin="0,0,4,4" />
+                    <Button Content="Октаэдр" Command="{Binding CreateOctahedronCommand}" Margin="0,0,4,4" />
+                    <Button Content="Икосаэдр" Command="{Binding CreateIcosahedronCommand}" Margin="0,0,4,4" />
+                    <Button Content="Додекаэдр" Command="{Binding CreateDodecahedronCommand}" />
+                </WrapPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Button Content="Загрузить OBJ" Command="{Binding LoadModelCommand}" />
+                    <Button Content="Сохранить OBJ" Command="{Binding SaveModelCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="Проекция" FontWeight="Bold" FontSize="17" Margin="0,10,0,0" />
+
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Button Content="Перспективная" Command="{Binding SetPerspectiveCommand}" />
+                    <Button Content="Аксонометрическая" Command="{Binding SetAxonometricCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="Аффинные преобразования" FontWeight="Bold" FontSize="17" Margin="0,10,0,0" />
+
+                <TextBlock Text="Смещение (X; Y; Z)" />
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBox Width="60" Text="{Binding TranslateX}" />
+                    <TextBox Width="60" Text="{Binding TranslateY}" />
+                    <TextBox Width="60" Text="{Binding TranslateZ}" />
+                    <Button Content="OK" Command="{Binding ApplyTranslationCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="Поворот вокруг оси, °" />
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBox Width="60" Text="{Binding RotationAngle}" />
+                    <ComboBox Width="70" SelectedItem="{Binding RotationAxis}">
+                        <x:String>X</x:String>
+                        <x:String>Y</x:String>
+                        <x:String>Z</x:String>
+                    </ComboBox>
+                    <Button Content="Повернуть" Command="{Binding ApplyRotationCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="Масштаб" />
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBox Width="80" Text="{Binding ScaleFactor}" />
+                    <Button Content="Масштабировать" Command="{Binding ApplyScaleCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="Отражение" />
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <ComboBox Width="80" SelectedItem="{Binding ReflectionPlane}">
+                        <x:String>XY</x:String>
+                        <x:String>XZ</x:String>
+                        <x:String>YZ</x:String>
+                    </ComboBox>
+                    <Button Content="Отразить" Command="{Binding ApplyReflectionCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="Поворот вокруг произвольной прямой"
+                           FontWeight="Bold" Margin="0,10,0,0" />
+
+                <TextBlock Text="Точка A (X; Y; Z)" />
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBox Width="60" Text="{Binding AxisPointX}" />
+                    <TextBox Width="60" Text="{Binding AxisPointY}" />
+                    <TextBox Width="60" Text="{Binding AxisPointZ}" />
+                </StackPanel>
+
+                <TextBlock Text="Направление (X; Y; Z)" />
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBox Width="60" Text="{Binding AxisDirectionX}" />
+                    <TextBox Width="60" Text="{Binding AxisDirectionY}" />
+                    <TextBox Width="60" Text="{Binding AxisDirectionZ}" />
+                </StackPanel>
+
+                <Button Content="Повернуть вокруг прямой"
+                        Command="{Binding ApplyCustomRotationCommand}" />
+
+                <TextBlock Text="Фигура вращения" FontWeight="Bold" FontSize="17" Margin="0,10,0,0" />
+
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBox Width="70" Text="{Binding RevolutionSegments}" />
+                    <ComboBox Width="70" SelectedItem="{Binding RevolutionAxis}">
+                        <x:String>X</x:String>
+                        <x:String>Y</x:String>
+                        <x:String>Z</x:String>
+                    </ComboBox>
+                    <Button Content="Построить" Command="{Binding BuildRevolutionCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="График z = f(x, y)" FontWeight="Bold" FontSize="17" Margin="0,10,0,0" />
+
+                <TextBox Text="{Binding SurfaceFunction}" />
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBox Width="70" Text="{Binding SurfaceSegments}" />
+                    <Button Content="Построить" Command="{Binding BuildSurfaceCommand}" />
+                </StackPanel>
+
+                <TextBlock Text="{Binding Status}" TextWrapping="Wrap"
+                           Foreground="DarkGreen" Margin="0,10,0,0" />
+
+                <TextBlock Text="Мышь: перемещение — поворот; колесо — масштаб."
+                           TextWrapping="Wrap" Foreground="Gray" Margin="0,10,0,0" />
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Column="1"
+                BorderBrush="Gray"
+                BorderThickness="1"
+                CornerRadius="6">
+            <rendering:SceneControl x:Name="Scene" />
+        </Border>
+
+    </Grid>
+</Window>
